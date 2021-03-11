@@ -1,16 +1,8 @@
-# log
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This Login/Registration Test Page made with Flutter and FirebaseAuth.
+The User will be able to access without having an account, this will create a anonymous account with no personal information. 
+If the user wants to make an account he will be able to do so in 3 different ways: 
+  Using his google account
+  Using his facebook account
+  Using email + password  -> to this method will follow an email verfication + sms verification
+  
+Inside the mock-application, the user will be able to access the profile page only if registered. From the profile page it is possible to delete the account or logout form the app
