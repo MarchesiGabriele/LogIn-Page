@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
               } else {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text("errore"),
+                    title: Text("errore  "),
                   ),
                   body: null,
                 );

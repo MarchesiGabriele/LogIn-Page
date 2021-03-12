@@ -49,14 +49,15 @@ class Auth {
 
   //CONTROLLO STATO UTENTE
   Future<bool> userStatus() async {
-    //controllo se l'utente è loggato e se ha un account, se non ce l'ha o non è loggato ritorno false
+    /* 
     User user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       print("Utente non Loggato/Senza account");
       return false;
-    }
+    } */
 
-    //TODO: questa parte è da aggistare, capire bene come funziona authStateChages
+    //controllo se l'utente è loggato e se ha un account, se non ce l'ha o non è loggato ritorno false
+    //stream restituisce "User" se l'utente è loggato e "Null" se non lo è o se non ha un account
     Stream stream = FirebaseAuth.instance.authStateChanges();
     User primoEvento = await stream.first;
 
@@ -66,11 +67,11 @@ class Auth {
     );
 
     if (primoEvento == null) {
-      print("utente non è loggato stream");
+      print("utente non loggato/senza account");
       return false;
     } else {
       print("utente è loggato stream");
-      print(user);
+      print(primoEvento);
       return true;
     }
   }
@@ -96,6 +97,26 @@ class Auth {
       print("user è stato sloggato");
     } catch (e) {
       print("errore logout");
+    }
+  }
+
+  //ESEGUO LOGIN
+  Future<String> loginWithEmail(String email, String password) async {
+    print("sos");
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return "ok";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        return "No user found for that email";
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+        return "Wrong password provided for that user";
+      } else {
+        return "errore";
+      }
     }
   }
 }
