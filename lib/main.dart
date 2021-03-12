@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'Screens/Home.dart';
 import 'Screens/RootPage.dart';
@@ -9,7 +10,7 @@ import 'Screens/RootPage.dart';
     Se ho un account contorllo se è fatto il login
       Se è fatto allora -> Home page
       Se non è fatto allora -> pagina login
-   */
+*/
 
 void main(List<String> args) {
   runApp(MyApp());
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         RegistrationPage.id: (BuildContext context) => RegistrationPage(),
         Home.id: (BuildContext context) => Home(),
         RootPage.id: (BuildContext context) => RootPage(),
+        LoginPage.id: (BuildContext context) => LoginPage()
       },
     );
   }

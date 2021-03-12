@@ -1,41 +1,39 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:log/Screens/Home.dart';
-import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Services/Auth.dart';
 
-//NB: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
+//NB: la pagina di registrazione e quella di login sono molto simili, cercare di creare o una classe astratta che ne fa da struttura o altro
 
-class RegistrationPage extends StatefulWidget {
-  static String id = "RegistrationPage";
+class LoginPage extends StatefulWidget {
+  static final String id = "LoginPage";
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
-  static const String _title = "Registration Page";
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _validEmail = false;
-  bool _validPassword = false;
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _emailController;
+  bool _validEmail;
+  TextEditingController _passwordController;
+  bool _validPassword;
+  String _loginError;
+
+  @override
+  void initState() {
+    super.initState();
+    _loginError = "";
+    _validEmail = false;
+    _validPassword = false;
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_title),
-          actions: [
-            Container(
-              padding: EdgeInsets.only(right: 15),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginPage.id);
-                },
-                child: Text("LogIn"),
-              ),
-            )
-          ],
+          title: Text("Login"),
         ),
         body: Form(
           //con autovalidate permetto ai campi di testo di aggiornarsi in tempo reale
@@ -43,6 +41,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              //messaggi di errore
+              Text(_loginError),
               //CAMPO DI TESTO EMAIL
               TextFormField(
                 decoration: InputDecoration(
@@ -59,6 +59,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 validator: (email) =>
                     email.isEmpty ? "Insert a Valid Email" : null,
               ),
+
               //CAMPO DI TESTO PASSWORD
               TextFormField(
                 controller: _passwordController,
@@ -77,20 +78,32 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 validator: (password) =>
                     password.isEmpty ? "Insert a Valid Password" : null,
               ),
-              //BOTTONE DI CONFERMA
 
+              //BOTTONE DI CONFERMA
               ElevatedButton(
-                //se email e password sono valide allora procedo alla registrazione
                 onPressed: _validEmail && _validPassword
                     ? () async {
-                        UserCredential p = await Auth().registrazioneEmail(
+                        //controllo che l'account esista, se esiste allora mando alla pagina principale altrimenti mostro un errore
+                        String result = await Auth().loginWithEmail(
                             _emailController.text, _passwordController.text);
-                        print(p.user.email);
-
-                        Navigator.pushNamed(context, Home.id);
+                        print("cavallo");
+                        if (result == "No user found for that email") {
+                          setState(() {
+                            _loginError = result;
+                          });
+                        } else if (result ==
+                            "Wrong password provided for that user") {
+                          setState(() {
+                            _loginError = result;
+                          });
+                        } else if (result == "ok") {
+                          Navigator.pushNamed(context, Home.id);
+                        } else {
+                          print(result);
+                        }
                       }
                     : null,
-                child: Text("Registrati!"),
+                child: Text("Login!"),
               ),
             ],
           ),
