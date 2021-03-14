@@ -70,7 +70,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         UserCredential p = await Auth().registrazioneEmail(
                             _emailController.text, _passwordController.text);
                         print(p.user.email);
-
                         Navigator.pushNamed(context, Home.id);
                       }
                     : null,

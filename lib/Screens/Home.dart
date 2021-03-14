@@ -3,6 +3,9 @@ import 'package:log/Screens/MainProfilo.dart';
 import 'package:log/Services/Auth.dart';
 import 'RegistrationPage.dart';
 
+//TODO: Quando entro per la prima volta nella home profilo devo caricare lo stato dell'utente e questo può creare un piccolo ritardo nella creazione della pagina che può essere
+//fastidioso. Bisogna cercare di recuperare stato dell'user prima di caricare la pagina e non durante il caricamento
+
 class Home extends StatefulWidget {
   static String id = "/";
   @override

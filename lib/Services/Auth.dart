@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
-//TODO: aggiustare currentUser dato che resituisce null sia quando l'utente non ha un accont sia quando questo è loggato out
 //TODO: quando un utente salta la registrazione, lo metto comunque come account anonimo
 
 class Auth {
@@ -56,7 +55,6 @@ class Auth {
       return false;
     }
 
-    //TODO: questa parte è da aggistare, capire bene come funziona authStateChages
     Stream stream = FirebaseAuth.instance.authStateChanges();
     User primoEvento = await stream.first;
 
