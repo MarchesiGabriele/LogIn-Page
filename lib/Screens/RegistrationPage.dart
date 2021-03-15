@@ -4,10 +4,9 @@ import 'package:log/Screens/Home.dart';
 import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Services/Auth.dart';
 
-
 //TODO: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
 //TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
-
+//test
 
 class RegistrationPage extends StatefulWidget {
   static String id = "RegistrationPage";
@@ -29,9 +28,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(_title),
-
           leading: Container(),
-
           actions: [
             Container(
               padding: EdgeInsets.only(right: 15),
@@ -116,7 +113,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                   child: Text("Continua Senza account"),
                 ),
-
               ),
             ],
           ),
