@@ -88,19 +88,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
 
               //BOTTONE DI CONFERMA
-<<<<<<< HEAD
-              ElevatedButton(
-                onPressed: _validEmail && _validPassword
-                    ? () async {
-                        UserCredential p = await Auth().registrazioneEmail(
-                            _emailController.text, _passwordController.text);
-                        print(p.user.email);
-                        Navigator.pushNamed(context, Home.id);
-                      }
-                    : null,
-                child: Text("Registrati!"),
-              )
-=======
               Container(
                 padding: EdgeInsets.only(top: 15),
                 child: ElevatedButton(
@@ -125,7 +112,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Text("Continua Senza account"),
                 ),
               ),
->>>>>>> 20363a8e4c99b57c19bfca532b1122fb52f43e1c
             ],
           ),
         ),
