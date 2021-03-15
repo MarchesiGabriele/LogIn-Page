@@ -25,12 +25,14 @@ class _HomeState extends State<Home> {
           Scaffold(
               appBar: AppBar(
                 title: Text("Feed"),
+                leading: Container(),
               ),
               body: null),
           //PAGINA PRICIPALE
           Scaffold(
             appBar: AppBar(
               title: Text(_title),
+              leading: Container(),
             ),
             body: Text("hey"),
           ),
@@ -42,6 +44,7 @@ class _HomeState extends State<Home> {
                 return Scaffold(
                   appBar: AppBar(
                     title: Text("Un secondo..."),
+                    leading: Container(),
                   ),
                   body: null,
                 );
@@ -54,7 +57,7 @@ class _HomeState extends State<Home> {
               } else {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text("errore"),
+                    title: Text("errore  "),
                   ),
                   body: null,
                 );
