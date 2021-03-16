@@ -38,6 +38,16 @@ class Auth {
     await user.sendEmailVerification();
   }
 
+  bool statoVerificaEmail(user) {
+    if (user.emailVerified) {
+      print("UTENTE HA VERIFICATO EMAIL");
+      return true;
+    } else {
+      print("UTENTE NON HA VERIFICATO EMAIL");
+      return false;
+    }
+  }
+
   //SIGN IN ANONYMOUSLY
   /* Future<void> signInAnonymous() async {
     try {
@@ -64,7 +74,6 @@ class Auth {
 
   //CONTROLLO STATO UTENTE
   Future<bool> userStatus() async {
-
     //controllo se l'utente è loggato e se ha un account, se non ce l'ha o non è loggato ritorno false
     //stream restituisce "User" se l'utente è loggato e "Null" se non lo è o se non ha un account
     Stream stream = FirebaseAuth.instance.authStateChanges();
@@ -76,17 +85,6 @@ class Auth {
     } else {
       print("utente è loggato stream");
       print(primoEvento);
-
-
-      //controllo se utente è verificato, se non lo è aspetto che verifichi la email, questo serve per quando l'utente si registra
-      //NB: forse questo potrebbe essere un controllo inutile farlo ogni volta che l'utente accede, cercare possibile soluzione alternativa
-      if (FirebaseAuth.instance.currentUser.emailVerified) {
-        print("Utente verificato");
-      } else {
-        print("procedere alla verifica");
-        await FirebaseAuth.instance.currentUser.sendEmailVerification();
-      }
-
       return true;
     }
   }

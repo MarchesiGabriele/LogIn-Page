@@ -3,6 +3,7 @@ import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'Screens/Home.dart';
 import 'Screens/RootPage.dart';
+import 'Screens/PaginaVerificaEmail.dart';
 
 //SCHEMA:
 /* Entro nell'account e controllo se ho un account: 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         RegistrationPage.id: (BuildContext context) => RegistrationPage(),
         Home.id: (BuildContext context) => Home(),
         RootPage.id: (BuildContext context) => RootPage(),
-        LoginPage.id: (BuildContext context) => LoginPage()
+        LoginPage.id: (BuildContext context) => LoginPage(),
+        PaginaVerificaEmail.id: (BuildContext context) => PaginaVerificaEmail()
       },
     );
   }

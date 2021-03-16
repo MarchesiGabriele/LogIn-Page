@@ -4,6 +4,8 @@ import 'package:log/Screens/Home.dart';
 import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Services/Auth.dart';
 
+import 'PaginaVerificaEmail.dart';
+
 //TODO: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
 //TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
 //test
@@ -99,8 +101,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           UserCredential p = await Auth().registrazioneEmail(
                               _emailController.text, _passwordController.text);
                           print(p.user.email);
-
-                          Navigator.pushNamed(context, Home.id);
+                          //invio email conferma
+                          await Auth().emailVerification();
+                          Navigator.pushNamed(context, PaginaVerificaEmail.id,
+                              arguments: p);
                         }
                       : null,
                   child: Text("Registrati!"),

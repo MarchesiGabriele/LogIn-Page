@@ -10,11 +10,10 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  //bool _authStatus = false;
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      //Quando un utente apre l'app controllo lo stato, se è loggato lo mando nella home altrimenti lo mando nella pagina registrazione
       future: Auth().firsUserStatus(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -26,15 +25,12 @@ class _RootPageState extends State<RootPage> {
           );
         } else if (snapshot.hasData) {
           if (snapshot.data == false) {
-            print("utente non loggato 1");
+            print("utente non loggato");
             return RegistrationPage();
           } else {
-            print("utente loggato 1");
+            print("utente loggato");
             return Home();
           }
-        } else if (snapshot.data == null) {
-          print("utente senza account 1");
-          return RegistrationPage();
         } else {
           return Scaffold(
             appBar: AppBar(
