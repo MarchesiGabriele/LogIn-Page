@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
@@ -33,11 +34,27 @@ class Auth {
     }
   }
 
+  //ACCEDO CON L'ACCOUNT GOOGLE
+  Future<UserCredential> signInGoogle() async {
+    GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+//INVIO EMAIL DI VERIFICA
   Future<void> emailVerification() async {
     User user = FirebaseAuth.instance.currentUser;
     await user.sendEmailVerification();
   }
 
+//CONTROLLO SE EMAIL DI VERIFICA E' STATA CONFERMATA DALL'UTENTE O MENO
   bool statoVerificaEmail(user) {
     if (user.emailVerified) {
       print("UTENTE HA VERIFICATO EMAIL");

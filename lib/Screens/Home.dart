@@ -3,10 +3,10 @@ import 'package:log/Screens/MainProfilo.dart';
 import 'package:log/Services/Auth.dart';
 import 'RegistrationPage.dart';
 
-//TODO: Quando entro per la prima volta nella home profilo devo caricare lo stato dell'utente e questo può creare un piccolo ritardo nella creazione della pagina che può essere
-//fastidioso. Bisogna cercare di recuperare stato dell'user prima di caricare la pagina e non durante il caricamento
+//TODO: lo stato dell utente viene caricato ogni volta che si arriva su "home".
 
 class Home extends StatefulWidget {
+  bool _userAccountStatus;
   static String id = "/";
   @override
   _HomeState createState() => _HomeState();
@@ -15,56 +15,53 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   PageController _pageController = PageController(initialPage: 1);
   static const String _title = "Home";
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: PageView(
-        controller: _pageController,
-        children: <Widget>[
-          //PAGINA FEED
-          Scaffold(
+      child: FutureBuilder(
+        future: Auth().userStatus(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
               appBar: AppBar(
-                title: Text("Feed"),
+                title: Text("Un secondo..."),
                 leading: Container(),
               ),
-              body: null),
-          //PAGINA PRICIPALE
-          Scaffold(
-            appBar: AppBar(
-              title: Text(_title),
-              leading: Container(),
-            ),
-            body: Text("hey"),
-          ),
-          //SEZIONE PROFILO
-          FutureBuilder(
-            future: Auth().userStatus(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
+              body: null,
+            );
+          } else if (snapshot.hasData) {
+            return PageView(
+              controller: _pageController,
+              children: <Widget>[
+                //PAGINA FEED
+                Scaffold(
+                    appBar: AppBar(
+                      title: Text("Feed"),
+                      leading: Container(),
+                    ),
+                    body: null),
+                //PAGINA PRICIPALE
+                Scaffold(
                   appBar: AppBar(
-                    title: Text("Un secondo..."),
+                    title: Text(_title),
                     leading: Container(),
                   ),
-                  body: null,
-                );
-              } else if (snapshot.hasData) {
-                if (snapshot.data == null || snapshot.data == false) {
-                  return RegistrationPage();
-                } else {
-                  return MainProfilo();
-                }
-              } else {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("errore  "),
-                  ),
-                  body: null,
-                );
-              }
-            },
-          )
-        ],
+                  body: Text("hey"),
+                ),
+                //SEZIONE PROFILO
+                snapshot.data == false ? RegistrationPage() : MainProfilo(),
+              ],
+            );
+          } else {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("errore  "),
+              ),
+              body: null,
+            );
+          }
+        },
       ),
     );
   }
