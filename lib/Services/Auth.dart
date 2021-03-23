@@ -4,8 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
-//TODO: aggiustare currentUser dato che resituisce null sia quando l'utente non ha un accont sia quando questo è loggato out
-//TODO: quando un utente salta la registrazione, lo metto comunque come account anonimo .
+//TODO: QUANDO UN UTENTE SI REGISTRA GLI MANDO UN'EMAIL E PER ENTRARE NELL APP DEVE FARE IL LOGIN. QUESTO LOGIN VIENE ACCETTATO
+//SOLO SE L'EMAIL E' STATA VERIFICATA, SE NON E' STATA VERIFICATA MANDO UN ERRORE E FACCIO APPARIRE PULSANTE CHE PERMETTE DI
+//INVIARE L'EMAIL DI VERIFICA NUOVAMENTE
 
 class Auth {
   //REGISTRAZIONE CON EMAIL SENZA VERIFICA
@@ -44,8 +45,33 @@ class Auth {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+    try {
+      print("autenticazione google effettuata");
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        print("errore google 1");
+        return null;
+      } else if (e.code == 'invalid-credential') {
+        print("errore google 2");
+        return null;
+      }
+    } catch (e) {
+      print("errore google 3");
+      return null;
+    }
+  }
+
+  //GOOGLE SIGNOUT
+  Future<void> googleSignOut() async {
+    try {
+      GoogleSignInAccount googleUser = await GoogleSignIn().signOut();
+      print("Google logout avvenuto con successo");
+      return;
+    } catch (e) {
+      print("google logout error");
+    }
   }
 
 //INVIO EMAIL DI VERIFICA

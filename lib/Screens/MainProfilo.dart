@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'package:log/Services/Auth.dart';
 
@@ -33,7 +34,12 @@ class _MainProfiloState extends State<MainProfilo> {
             Center(
                 child: ElevatedButton(
               onPressed: () async {
-                await Auth().logOut();
+                if (await GoogleSignIn().isSignedIn()) {
+                  Auth().googleSignOut();
+                } else {
+                  await Auth().logOut();
+                }
+
                 Navigator.pushNamed(context, RegistrationPage.id);
               },
               child: Text("Log off"),
