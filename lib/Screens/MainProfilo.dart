@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'package:log/Services/Auth.dart';
@@ -34,9 +36,19 @@ class _MainProfiloState extends State<MainProfilo> {
             Center(
                 child: ElevatedButton(
               onPressed: () async {
+                //utente loggato con google
                 if (await GoogleSignIn().isSignedIn()) {
                   Auth().googleSignOut();
-                } else {
+                }
+                //utente loggato con facebook
+                else if (FirebaseAuth.instance.currentUser != null &&
+                    FirebaseAuth
+                            .instance.currentUser.providerData[0].providerId ==
+                        "facebook.com") {
+                  await Auth().facebookSignOut();
+                }
+                //utente loggato con email e password
+                else {
                   await Auth().logOut();
                 }
 

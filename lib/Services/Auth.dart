@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
@@ -35,6 +36,31 @@ class Auth {
     }
   }
 
+  //ACCEDO CON ACCOUNT FACEBOOK
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final FacebookAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(result.accessToken.token);
+
+    // Once signed in, return the UserCredential
+    print("ACCESSO CON FACEBOOK EFFETTUATO");
+    return await FirebaseAuth.instance
+        .signInWithCredential(facebookAuthCredential);
+  }
+
+  //FACEBOOK SIGNOUT
+  Future<void> facebookSignOut() async {
+    try {
+      await FacebookAuth.instance.logOut();
+      print("FACEBOOK LOG OUT AVVENUTO CON SUCCESSO");
+    } catch (e) {
+      print("FACEBOOK LOG OUT ERROR");
+    }
+  }
+
   //ACCEDO CON L'ACCOUNT GOOGLE
   Future<UserCredential> signInGoogle() async {
     GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -46,7 +72,7 @@ class Auth {
       idToken: googleAuth.idToken,
     );
     try {
-      print("autenticazione google effettuata");
+      print("AUTENTICAZIONE GOOGLE EFFETTUATA");
 
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
@@ -66,11 +92,10 @@ class Auth {
   //GOOGLE SIGNOUT
   Future<void> googleSignOut() async {
     try {
-      GoogleSignInAccount googleUser = await GoogleSignIn().signOut();
-      print("Google logout avvenuto con successo");
-      return;
+      await GoogleSignIn().signOut();
+      print("GOOGLE LOG OUT AVVENUTO CON SUCCESSO");
     } catch (e) {
-      print("google logout error");
+      print("GOOGLE LOG OUT ERROR");
     }
   }
 

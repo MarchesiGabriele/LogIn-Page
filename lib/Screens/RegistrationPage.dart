@@ -49,31 +49,50 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             children: <Widget>[
               //REGISTRAZIONE/LOGIN CON SOCIAL
-              Row(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: (MediaQuery.of(context).size.width - 215) / 2,
-                        top: 15),
-                    height: 40,
-                    width: 215,
-                    child: SignInButtonBuilder(
-                      text: "Sign In With Google",
-                      onPressed: () async {
-                        UserCredential user = await Auth().signInGoogle();
-                        if (user != null)
-                          Navigator.pushNamed(context, Home.id);
-                        //eseguo qualcosa in caso la registrazione vada storta
-                        else {}
-                      },
-                      backgroundColor: Colors.red,
-                      image: Image.network(
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7Orbk_hp4YopD2HHRn198vBdKgkvbqfVWYQ&usqp=CAU",
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+
+              //REGISTRAZIONE CON GOOGLE
+              Container(
+                margin: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 215) / 2,
+                    top: 15),
+                height: 40,
+                width: 215,
+                child: SignInButtonBuilder(
+                  text: "Sign In With Google",
+                  onPressed: () async {
+                    UserCredential user = await Auth().signInGoogle();
+                    if (user != null)
+                      Navigator.pushNamed(context, Home.id);
+                    //eseguo qualcosa in caso la registrazione vada storta
+                    else {}
+                  },
+                  backgroundColor: Colors.red,
+                  image: Image.network(
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7Orbk_hp4YopD2HHRn198vBdKgkvbqfVWYQ&usqp=CAU",
+                    fit: BoxFit.contain,
                   ),
-                ],
+                ),
+              ),
+
+              //REGISTRAZIONE CON FACEBOOK
+              Container(
+                margin: EdgeInsets.only(
+                    left: (MediaQuery.of(context).size.width - 215) / 2,
+                    top: 15),
+                height: 40,
+                width: 215,
+                child: SignInButtonBuilder(
+                  text: "Sign In With Facebook",
+                  onPressed: () async {
+                    UserCredential user = await Auth().signInWithFacebook();
+                    if (user != null)
+                      Navigator.pushNamed(context, Home.id);
+                    //eseguo qualcosa in caso la registrazione vada storta
+                    else {}
+                  },
+                  backgroundColor: Colors.blue,
+                  icon: Icons.ac_unit,
+                ),
               ),
 
               //CAMPO DI TESTO EMAIL
