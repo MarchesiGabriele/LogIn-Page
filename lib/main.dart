@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:log/Screens/LoginPage.dart';
+import 'package:log/Screens/PaginaVerificaTelefono.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'package:log/Screens/SceltaVerificaAccount.dart';
 import 'Screens/Home.dart';
+import 'Screens/PaginaVerificaTelefono2.dart';
 import 'Screens/RootPage.dart';
 import 'Screens/PaginaVerificaEmail.dart';
 import 'Screens/SceltaVerificaAccount.dart';
@@ -32,7 +34,11 @@ class MyApp extends StatelessWidget {
         LoginPage.id: (BuildContext context) => LoginPage(),
         PaginaVerificaEmail.id: (BuildContext context) => PaginaVerificaEmail(),
         SceltaVerificaAccount.id: (BuildContext context) =>
-            SceltaVerificaAccount()
+            SceltaVerificaAccount(),
+        PaginaVerificaTelefono.id: (BuildContext context) =>
+            PaginaVerificaTelefono(),
+        PaginaVerificaTelefono2.id: (BuildContext context) =>
+            PaginaVerificaTelefono2(),
       },
     );
   }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:log/Screens/PaginaVerificaTelefono2.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
@@ -115,41 +116,6 @@ class Auth {
       return false;
     }
   }
-
-  /* Future<String> phoneAuth(String numeroTel) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: numeroTel,
-
-      //Per utenti ANDROID verifico codice sms in automatico, senza che utente debba inserire il codice
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential);
-        return "utente_verificato";
-      },
-      //In caso di numero sbagliato o altri errori
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        }
-        return "errore_verifica";
-      },
-      codeSent: (String verificationId, int resendToken) async {
-        String _codice = await getCodiceConferma();         
-
-        // Create a PhoneAuthCredential with the code
-        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: _codice);
-
-        // Sign the user in (or link) with the credential
-        await auth.signInWithCredential(phoneAuthCredential);
-      },
-
-      //Tempo in cui il telefono cerca il codice di autenticazione automaticamente
-      codeAutoRetrievalTimeout: (String verificationId) async{    
-      },
-    );
-  }
- */
   //SIGN IN ANONYMOUSLY
   /* Future<void> signInAnonymous() async {
     try {

@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Screens/PaginaVerificaEmail.dart';
+import 'package:log/Screens/PaginaVerificaTelefono.dart';
 import 'package:log/Services/Auth.dart';
 
 //CHIEDO ALL'UTENTE SE VUOLE VERIFICARE ACCOUNT CON EMAIL O CON NUMERO DI TELEFONO
 
 //TODO: Al posto di chiamare chiamare "Verifica Email" da qua lo dovrei fare dopo essere arrivato nella pagina di verifica
 //dell'email, almeno non devo aspettare nel caricare quella pagina
+
+//TODO: il controllo della password e del fatto che l'email esista
 
 class SceltaVerificaAccount extends StatelessWidget {
   static final String id = "SceltaVerificaAccount";
@@ -31,8 +34,12 @@ class SceltaVerificaAccount extends StatelessWidget {
                 ),
                 //VERIFICA CON NUMERO DI TELEFONO
                 ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Verifica con numero di Telefono")),
+                  onPressed: () {
+                    Navigator.pushNamed(context, PaginaVerificaTelefono.id,
+                        arguments: _datiUtente);
+                  },
+                  child: const Text("Verifica con numero di Telefono"),
+                ),
                 const SizedBox(
                   height: 50,
                 ),
