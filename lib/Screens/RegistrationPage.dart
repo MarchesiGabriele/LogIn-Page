@@ -5,6 +5,8 @@ import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Screens/SceltaVerificaAccount.dart';
 import 'package:log/Services/Auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:log/Services/FacebookAuth.dart';
+import 'package:log/Services/GoogleAuth.dart';
 
 //TODO: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
 //TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
@@ -12,13 +14,13 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 //TODO: Usare Dispose quando ho finito di usare i texteditingcontrollers!
 
 class RegistrationPage extends StatefulWidget {
-  static final String id = "RegistrationPage";
+  static const String id = "RegistrationPage";
+  final String _title = "Registration Page";
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  static const String _title = "Registration Page";
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _validEmail = false;
@@ -31,7 +33,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(_title),
+          title: Text(widget._title),
           leading: Container(),
           actions: [
             Container(
@@ -55,49 +57,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 //REGISTRAZIONE/LOGIN CON SOCIAL
 
                 //REGISTRAZIONE CON GOOGLE
-                Container(
-                  margin: EdgeInsets.only(
-                      left: (MediaQuery.of(context).size.width - 300) / 4,
-                      top: 15),
-                  height: 40,
-                  width: 215,
-                  child: SignInButtonBuilder(
-                    text: "Sign In With Google",
-                    onPressed: () async {
-                      UserCredential user = await Auth().signInGoogle();
-                      if (user != null)
-                        Navigator.pushNamed(context, Home.id);
-                      //eseguo qualcosa in caso la registrazione vada storta
-                      else {}
-                    },
-                    backgroundColor: Colors.red,
-                    image: Image.network(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7Orbk_hp4YopD2HHRn198vBdKgkvbqfVWYQ&usqp=CAU",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
+                GoogleAuth(),
 
                 //REGISTRAZIONE CON FACEBOOK
-                Container(
-                  margin: EdgeInsets.only(
-                      left: (MediaQuery.of(context).size.width - 300) / 4,
-                      top: 15),
-                  height: 40,
-                  width: 215,
-                  child: SignInButtonBuilder(
-                    text: "Sign In With Facebook",
-                    onPressed: () async {
-                      UserCredential user = await Auth().signInWithFacebook();
-                      if (user != null)
-                        Navigator.pushNamed(context, Home.id);
-                      //eseguo qualcosa in caso la registrazione vada storta
-                      else {}
-                    },
-                    backgroundColor: Colors.blue,
-                    icon: Icons.ac_unit,
-                  ),
-                ),
+                FacebookAuth1(),
 
                 //CAMPO DI TESTO EMAIL
                 Container(
@@ -142,7 +105,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
 
                 //BOTTONE DI CONFERMA
-
                 Container(
                   padding: EdgeInsets.only(top: 15),
                   child: ElevatedButton(

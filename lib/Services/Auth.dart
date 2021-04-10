@@ -38,7 +38,7 @@ class Auth {
   }
 
   //ACCEDO CON ACCOUNT FACEBOOK
-  Future<UserCredential> signInWithFacebook() async {
+  /* Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
     final LoginResult result = await FacebookAuth.instance.login();
 
@@ -50,7 +50,7 @@ class Auth {
     print("ACCESSO CON FACEBOOK EFFETTUATO");
     return await FirebaseAuth.instance
         .signInWithCredential(facebookAuthCredential);
-  }
+  } */
 
   //FACEBOOK SIGNOUT
   Future<void> facebookSignOut() async {
@@ -59,34 +59,6 @@ class Auth {
       print("FACEBOOK LOG OUT AVVENUTO CON SUCCESSO");
     } catch (e) {
       print("FACEBOOK LOG OUT ERROR");
-    }
-  }
-
-  //ACCEDO CON L'ACCOUNT GOOGLE
-  Future<UserCredential> signInGoogle() async {
-    GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-    GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    try {
-      print("AUTENTICAZIONE GOOGLE EFFETTUATA");
-
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        print("errore google 1");
-        return null;
-      } else if (e.code == 'invalid-credential') {
-        print("errore google 2");
-        return null;
-      }
-    } catch (e) {
-      print("errore google 3");
-      return null;
     }
   }
 
