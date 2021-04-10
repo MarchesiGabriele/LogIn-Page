@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:log/Screens/LoginPage.dart';
+import 'package:log/Screens/PaginaVerificaTelefono.dart';
 import 'package:log/Screens/RegistrationPage.dart';
+import 'package:log/Screens/SceltaVerificaAccount.dart';
 import 'Screens/Home.dart';
+import 'Screens/PaginaVerificaTelefono2.dart';
 import 'Screens/RootPage.dart';
 import 'Screens/PaginaVerificaEmail.dart';
-
+import 'Screens/SceltaVerificaAccount.dart';
 //SCHEMA:
 /* Entro nell'account e controllo se ho un account: 
     Se non ho un account -> pagina creazione account
@@ -29,7 +32,13 @@ class MyApp extends StatelessWidget {
         Home.id: (BuildContext context) => Home(),
         RootPage.id: (BuildContext context) => RootPage(),
         LoginPage.id: (BuildContext context) => LoginPage(),
-        PaginaVerificaEmail.id: (BuildContext context) => PaginaVerificaEmail()
+        PaginaVerificaEmail.id: (BuildContext context) => PaginaVerificaEmail(),
+        SceltaVerificaAccount.id: (BuildContext context) =>
+            SceltaVerificaAccount(),
+        PaginaVerificaTelefono.id: (BuildContext context) =>
+            PaginaVerificaTelefono(),
+        PaginaVerificaTelefono2.id: (BuildContext context) =>
+            PaginaVerificaTelefono2(),
       },
     );
   }

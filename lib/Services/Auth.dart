@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:log/Screens/PaginaVerificaTelefono2.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
@@ -115,7 +116,6 @@ class Auth {
       return false;
     }
   }
-
   //SIGN IN ANONYMOUSLY
   /* Future<void> signInAnonymous() async {
     try {

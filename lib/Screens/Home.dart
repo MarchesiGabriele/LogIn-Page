@@ -6,7 +6,6 @@ import 'RegistrationPage.dart';
 //TODO: lo stato dell utente viene caricato ogni volta che si arriva su "home".
 
 class Home extends StatefulWidget {
-  bool _userAccountStatus;
   static String id = "/";
   @override
   _HomeState createState() => _HomeState();
