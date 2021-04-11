@@ -3,22 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:log/Screens/Home.dart';
+import 'package:log/Screens/RegistrationPage.dart';
+
+import 'Auth.dart';
+
+//In questa classe gestisco la logica per il signIn e per il signOut con Google
 
 //TODO: Se ho delle eccezioni durante la creazione dell'account, fare qualcos'altro oltre a ritornare "null"
 //
-//NB: Se un utente possiede già un account creato con facebook con la stessa email, se cerca di entrare con google ci riesce,
+//TODO:  Se un utente possiede già un account creato con facebook con la stessa email, se cerca di entrare con google ci riesce,
 //ma sovrascrive l'account di facebook, quindi successivamente non può più entrare con facebook.
 
-class GoogleAuth extends StatelessWidget {
+class GoogleAuth {
+  //GOOGLE SIGN IN
   Future<UserCredential> signInGoogle() async {
-    //Creo credenziale per la creazione dell'account/login
     GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     GoogleAuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    //Provo a creare account/login con le credenziali create
+
     try {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
@@ -35,32 +40,14 @@ class GoogleAuth extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: (MediaQuery.of(context).size.width - 300) / 4,
-        top: 15,
-      ),
-      height: 40,
-      width: 215,
-      child: SignInButtonBuilder(
-        text: "Sign In With Google",
-        onPressed: () async {
-          UserCredential user = await signInGoogle();
-          if (user != null) {
-            print("VERIFICA CON GOOGLE EFFETTUATA");
-            Navigator.pushNamed(context, Home.id);
-          } else {
-            print("ERRORE VERIFICA CON GOOGLE");
-          }
-        },
-        backgroundColor: Colors.red,
-        image: Image.network(
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7Orbk_hp4YopD2HHRn198vBdKgkvbqfVWYQ&usqp=CAU",
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
+  //GOOGLE SIGNOUT
+  Future<void> signOutGoogle() async {
+    try {
+      await GoogleSignIn().signOut();
+      await Auth().logOut();
+      print("GOOGLE LOG OUT AVVENUTO CON SUCCESSO");
+    } catch (e) {
+      print("GOOGLE LOG OUT ERROR");
+    }
   }
 }

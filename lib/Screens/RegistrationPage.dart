@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Screens/Home.dart';
 import 'package:log/Screens/LoginPage.dart';
 import 'package:log/Screens/SceltaVerificaAccount.dart';
-import 'package:log/Services/Auth.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:log/Services/FacebookAuth.dart';
-import 'package:log/Services/GoogleAuth.dart';
+import 'package:log/Widgets/FacebookAuthButton.dart';
+import 'package:log/Widgets/GoogleAuthButton.dart';
 
 //TODO: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
 //TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
@@ -54,13 +51,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                //REGISTRAZIONE/LOGIN CON SOCIAL
-
                 //REGISTRAZIONE CON GOOGLE
-                GoogleAuth(),
+                GoogleAuthButton(),
 
                 //REGISTRAZIONE CON FACEBOOK
-                FacebookAuth1(),
+                FacebookAuthButton(),
 
                 //CAMPO DI TESTO EMAIL
                 Container(
