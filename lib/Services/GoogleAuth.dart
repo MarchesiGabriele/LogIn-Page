@@ -11,8 +11,8 @@ import 'Auth.dart';
 
 //TODO: Se ho delle eccezioni durante la creazione dell'account, fare qualcos'altro oltre a ritornare "null"
 //
-//TODO:  Se un utente possiede già un account creato con facebook con la stessa email, se cerca di entrare con google ci riesce,
-//ma sovrascrive l'account di facebook, quindi successivamente non può più entrare con facebook.
+//Se un utente possiede già un account creato con facebook con la stessa email, se cerca di entrare con google ci riesce,
+//ma sovrascrive l'account di facebook. Se un utente ha creato un account con email e password non ci sono problemi
 
 class GoogleAuth {
   //GOOGLE SIGN IN
@@ -28,7 +28,7 @@ class GoogleAuth {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
-        print("errore verifica google 1");
+        print("ACCOUNT CON STESSA EMAIL GIA' PRESENTE");
         return null;
       } else if (e.code == 'invalid-credential') {
         print("errore verifica google 2");

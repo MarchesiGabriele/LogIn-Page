@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:log/Screens/PaginaVerificaTelefono2.dart';
 import 'package:log/Services/Auth.dart';
 
-//TODO; questa pagina è molto simile a quella in cui si va a inserire il codice
+import 'PaginaPhoneAuth2.dart';
 
+//IN QUESTA PAGINA L'UTENTE INSERISCE IL PROPRIO NUMERO DI TELEFONO PER POTER RICEVERE IL CODICE
+
+//TODO forse posso usare in qualche modo un inherited widget per avere sempre a disposizione email e password nel caso ci siano
 //SCHEMA: Inserisco numero di telefono
 
-class PaginaVerificaTelefono extends StatefulWidget {
-  static final String id = "PaginaVerificaTelefono";
+class PaginaPhoneAuth1 extends StatefulWidget {
+  static final String id = "PaginaPhoneAuth1";
   final String title = "Verifica Numero Telefono";
   @override
-  _PaginaVerificaTelefonoState createState() => _PaginaVerificaTelefonoState();
+  _PaginaPhoneAuth1State createState() => _PaginaPhoneAuth1State();
 }
 
-class _PaginaVerificaTelefonoState extends State<PaginaVerificaTelefono> {
+class _PaginaPhoneAuth1State extends State<PaginaPhoneAuth1> {
+  //Controllore per campo di testo
   TextEditingController numeroController;
+  //Stringa per indicare errori da mostrare all'utente
   String messaggio;
+  List _datiUtente;
 
   @override
   void initState() {
     super.initState();
     numeroController = TextEditingController();
     messaggio = "";
+    _datiUtente = [];
   }
 
   @override
   Widget build(BuildContext context) {
-    List _datiUtente = ModalRoute.of(context).settings.arguments;
+    //Se arrivo da creazione account con email e password, prendo ricevo questi argomenti, altrimenti non ricevo nulla
+    if (ModalRoute.of(context).settings.arguments != null)
+      _datiUtente = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -54,15 +62,15 @@ class _PaginaVerificaTelefonoState extends State<PaginaVerificaTelefono> {
             ElevatedButton(
               //TODO: Devo decidere cosa mostrare mentre attendo, dato che non so cosa riceverò.
               onPressed: () {
-                if (_datiUtente != null)
-                  _datiUtente.add(numeroController.text);
-                else
-                  List _datiUtente = [numeroController.text];
-                Navigator.pushNamed(context, PaginaVerificaTelefono2.id,
+                //Aggiungo ai parametri da passare alla prossima pagina il numero di telefono
+                _datiUtente.add(numeroController.text);
+                //Passo alla pagina successiva di verifica passando gli argomenti
+                Navigator.pushNamed(context, PaginaPhoneAuth2.id,
                     arguments: _datiUtente);
               },
               child: Text("Invia"),
             ),
+            //Mostro un messaggio di errore in caso ce ne sia uno
             Text(messaggio),
           ],
         ),

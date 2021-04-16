@@ -22,8 +22,17 @@ class FacebookAuth1 {
     try {
       return await FirebaseAuth.instance
           .signInWithCredential(facebookAuthCredential);
-    } catch (Faceboo) {
-      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        print("ACCOUNT CON STESSA EMAIL GIA' PRESENTE");
+        return null;
+      } else if (e.code == 'invalid-credential') {
+        print("errore verifica google 2");
+        return null;
+      } else {
+        print("errore verifica google 3");
+        return null;
+      }
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:log/Screens/Home.dart';
+import 'package:log/Screens/PaginaVerificaTelefono.dart';
 import 'package:log/Services/FacebookAuth1.dart';
 
 class FacebookAuthButton extends StatelessWidget {
@@ -19,8 +20,9 @@ class FacebookAuthButton extends StatelessWidget {
         onPressed: () async {
           UserCredential user = await FacebookAuth1().signInFacebook();
           if (user != null) {
-            print("ACCESSO CON FACEBOOK EFFETTUATO");
-            Navigator.pushNamed(context, Home.id);
+            print(
+                "ACCESSO CON FACEBOOK EFFETTUATO... PROCEDERE ALLA VERIFICA CON NUMERO TELEFONO...");
+            Navigator.pushNamed(context, PaginaVerificaTelefono.id);
           } else {
             print("ERRORE NELL'ACCESSO CON FACEBOOK");
           }
@@ -32,5 +34,5 @@ class FacebookAuthButton extends StatelessWidget {
         ),
       ),
     );
-  } 
+  }
 }
