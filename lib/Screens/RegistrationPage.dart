@@ -9,6 +9,7 @@ import 'package:log/Widgets/GoogleAuthButton.dart';
 //TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
 //test
 //TODO: Usare Dispose quando ho finito di usare i texteditingcontrollers!
+//TODO: usare una form per i campi di testo e il bottone di conferma
 
 class RegistrationPage extends StatefulWidget {
   static const String id = "RegistrationPage";
@@ -116,6 +117,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     child: Text("Registrati!"),
                   ),
                 ),
+
+                //BOTTONE PER CONTINUARE SENZA ACCOUNT
                 Container(
                   child: ElevatedButton(
                     onPressed: () {

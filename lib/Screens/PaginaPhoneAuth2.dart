@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Services/Auth.dart';
 import 'package:log/Services/PhoneAuth.dart';
@@ -33,11 +34,11 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
       child: FutureBuilder(
         //Controllo se ho anche password ed email o solo numero telefono, in base a quello mando solamente i dati che possiedo
         future: _datiUtente.length == 1
-            ? PhoneAuth().verificaCodice(numeroTel: _datiUtente.elementAt(0))
-            : PhoneAuth().verificaCodice(
+            ? verifyPhone(numeroTelefono: _datiUtente.elementAt(0))
+            : verifyPhone(
                 email: _datiUtente.elementAt(0),
                 password: _datiUtente.elementAt(1),
-                numeroTel: _datiUtente.elementAt(2)),
+                numeroTelefono: _datiUtente.elementAt(2)),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           //Aspetto che la pagina carichi
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -76,8 +77,12 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
                     ElevatedButton(
                       onPressed: () async {
                         try {
-                          AuthCredential cred = PhoneAuthProvider.credential(
-                              verificationId: verificationCode,
+                          if()
+
+                          /* AuthCredential cred = PhoneAuthProvider.credential(
+                              //Dentro snapshot.data ho il codice che firebase ha mandato all'utente e che deve essere uguale
+                              //a quello che inserisce per effettuare la verifica
+                              verificationId: snapshot.data,
                               smsCode: numeroController.text);
                           print(
                               "CODICE INSERITO E' CORRETTO, PROCEDO A CREARE ACCOUNT");
@@ -85,7 +90,7 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
                               _infoUtente.elementAt(0),
                               _infoUtente.elementAt(1));
                           print("ACCOUNT CON EMAIL E NUMERO CELL CREATO 22!");
-                          Navigator.pushNamed(context, Home.id);
+                          Navigator.pushNamed(context, Home.id); */
                         } catch (e) {
                           print("CODICE INSERITO E' ERRATO");
                         }
@@ -102,12 +107,20 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
       ),
     );
   }
+
+  Future<void> verifyPhone({String email, String password, @required String numeroTelefono}) async{
+
+      
+
+
+    await FirebaseAuth.instance.verifyPhoneNumber(phoneNumber: phoneNumber,
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
+
+  }
 }
-
-
-
-
-
 
 /* SafeArea(
       child: Scaffold(
