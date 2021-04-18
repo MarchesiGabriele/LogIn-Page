@@ -18,3 +18,10 @@ I will use the same exact registration page and email verification page for the 
 
 
 
+TODO LIST: 
+- !!Quando si crea un account con email, l'account viene creato prima della verifica email. Se la verifica email fallisce l'account è comunque creato ma non è verificato. Quindi decidere se creare account dopo la verifica o se permettere all'utente di verificare l'account in un secondo momento
+- Nella Home() cercare una soluzione per non avere all'interno della classe il metodo per conoscere lo stato dell'utente. Eventualmente capire se posso prendere lo stato da RootPage() o se posso evitare di usare il futurebuilder.
+- Cambiare il layout della pagina di registrazione. La prima cosa che l'utente deve vedere è la pagina di Login con i anche i metodi di login/registrazione con social. Se poi vuole registrarsi allora può andare sulla pagina di registrazione dove può registrarsi con email e password o con i vari social. 
+- Nella RegistrationPage() aggiungere dei controlli aggiuntivi alla email e alla password prima di procedere con la creazione dell account. (es. formato email sia valido, password non sia troppo debole etc.) Stare attenti in caso di email con formato valido ma non esistenti, capire se firebase lancia eccezine o meno. 
+- Nella RegistrationPage() usare una form per il campo email, password e bottone Registrati. 
+- In SceltaVerificaAccount() gestire le eccezioni che possono essere lanciate alla creazione del'account con email. Se vengono lanciate queste eccezioni devo tornare alla pagina di registrazione ed indicare qual'è il problema. 

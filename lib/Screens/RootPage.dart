@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Screens/Home.dart';
 import 'package:log/Screens/RegistrationPage.dart';
-import 'package:log/Services/Auth.dart';
 
 //IN QUESA PAGINA INIZIALIZZO FIREBASE E MANTENGO SOTTO'OCCHIO LO STATO DELL'UTENTE, SE QUESTO E' LOGGATO GLI MOSTRO LA HOME
 //SE NON LO E' PIU' PERCHE' HA CANCELLATO L'ACCOUNT HO HA FATTO SIGN OUT ALLORA GLI MOSTRO LA PAGINA DI REGISTRAZIONE

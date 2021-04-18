@@ -5,11 +5,9 @@ import 'package:log/Screens/SceltaVerificaAccount.dart';
 import 'package:log/Widgets/FacebookAuthButton.dart';
 import 'package:log/Widgets/GoogleAuthButton.dart';
 
-//TODO: se la password inserita è troppo debole firebase la rifiuta, stessa cosa se l'email non ha il formato giusto, devo destire questi casi facendolo notare all utente
-//TODO: controllare che l'account email esista al momento della registrazione, altrimenti non sono in grado di inviargli una email per la verifica
-//test
+//IN QUESTA PAGINA L'UTENTE PUO' REGISTRARSI CON EMAIL E PASSWORD O USANDO I SOCIAL
+
 //TODO: Usare Dispose quando ho finito di usare i texteditingcontrollers!
-//TODO: usare una form per i campi di testo e il bottone di conferma
 
 class RegistrationPage extends StatefulWidget {
   static const String id = "RegistrationPage";
@@ -34,6 +32,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           title: Text(widget._title),
           leading: Container(),
           actions: [
+            //Pulsante per accedere alla pagina di login
             Container(
               padding: EdgeInsets.only(right: 15),
               child: ElevatedButton(
@@ -107,6 +106,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     //se email e password sono valide allora procedo alla registrazione
                     onPressed: _validEmail && _validPassword
                         ? () async {
+                            //Vado alla pagina di scelta del metodo di verifica. Passo come parametri email e password.
                             Navigator.pushNamed(
                                 context, SceltaVerificaAccount.id, arguments: [
                               _emailController.text,
@@ -114,7 +114,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ]);
                           }
                         : null,
-                    child: Text("Registrati!"),
+                    child: const Text("Registrati!"),
                   ),
                 ),
 
@@ -124,7 +124,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     onPressed: () {
                       Navigator.pushNamed(context, Home.id);
                     },
-                    child: Text("Continua Senza account"),
+                    child: const Text("Continua Senza account"),
                   ),
                 ),
               ],

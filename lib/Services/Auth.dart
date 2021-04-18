@@ -45,17 +45,6 @@ class Auth {
     await user.sendEmailVerification();
   }
 
-//CONTROLLO SE EMAIL DI VERIFICA E' STATA CONFERMATA DALL'UTENTE O MENO
-  bool statoVerificaEmail(user) {
-    if (user.emailVerified) {
-      print("UTENTE HA VERIFICATO EMAIL");
-      return true;
-    } else {
-      print("UTENTE NON HA VERIFICATO EMAIL");
-      return false;
-    }
-  }
-
   //CONTROLLO STATO UTENTE QUANDO APRE L'APPLICAZIONE
   Future<bool> firsUserStatus() async {
     //inizializzo applicazione
