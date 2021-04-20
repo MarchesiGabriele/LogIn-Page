@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
                     title: Text(widget._title),
                     leading: Container(),
                   ),
-                  body: const Text("hey"),
+                  body: Text(FirebaseAuth.instance.currentUser.toString()),
                 ),
                 //SEZIONE PROFILO
                 snapshot.data == false ? RegistrationPage() : MainProfilo(),

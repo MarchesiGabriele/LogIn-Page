@@ -47,7 +47,7 @@ class SceltaVerificaAccount extends StatelessWidget {
                 //VERIFICA CON EMAIL
                 ElevatedButton(
                     onPressed: () async {
-                      //Creo temporaneamente account con email e password.
+                      //Creo account con email e password.
                       UserCredential p = await registrazioneEmail(
                         _datiUtente.elementAt(0),
                         _datiUtente.elementAt(1),
