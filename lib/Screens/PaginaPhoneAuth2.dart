@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Screens/PaginaPhoneAuth1.dart';
 import 'package:log/Services/Auth.dart';
@@ -114,10 +115,13 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
     );
   }
 
+  
   //Se utente viene verificato automaticamente lo mando alla home e gli aggiorno il profilo con "emailVerified" = true
   void verificationCompletedAction(PhoneAuthCredential credentials){
     print("VERIFICA SMS AUTOMATICA EFFETTUTA!");
-    Navigator.pushNamed(context, Home.id);    
+    Navigator.pushNamed(context, Home.id);       
+    FirebaseAuth.instance.
+
   }
 
   //Se verifica fallisce mando utente a inserire nuovamente il numero di telefono

@@ -1,3 +1,15 @@
+
+******** UNFINISHED ***********
+After trying Firebase as a auth method I don't like how it works and I would like to have more freedom, so I will make a version 2 of this project with a custom backend/custom auth methods. 
+This will allow me to have a better control on currentUsers
+
+Things I dont like about Firebase (I didnt find a solution for these problems. There might be one, but its well hidden)
+- I cant manually modify user account data
+- With Phone Auth I want more freedom / I want to use it to verify an account and not as an access method
+- Most of the documentation is deprecated
+
+
+
 This Login/Registration Test Page made with Flutter and FirebaseAuth.
 The User will be able to access without having an account, this will create a anonymous account with no personal information. 
 If the user wants to make an account he will be able to do so in 3 different ways: 
@@ -7,14 +19,15 @@ If the user wants to make an account he will be able to do so in 3 different way
   
 Inside the mock-application, the user will be able to access the profile page only if registered. From the profile page it is possible to delete the account or logout form the app
 
+CONS: 
+The account is always created before the verification, so if the verification fails I have to delete it. This is not the best aproach. It should be better to wait and create the account after it is verified. No accounts can be created without being immediatly verified. 
+Unfortunatly seems like firebase wants to create an account before verifying it. 
 
 
-EMAIL - PASSWORD REGISTRATION
-After inserting an email + password an email is sent to the user. Without verifying the email the user can't use the application.
-The email can be sent multiple times. 
-After veryifing the email the user has to press a button to refresh his state. I might upgrade this with a Stream that provides every x seconds the state of the email verification. 
-  This could be more expensive and also I have to set a time limit for the email verification. After that limit the user needs to request a new verification email. 
-I will use the same exact registration page and email verification page for the profile-registration-page that is shown when a user without being logged is tries to open the profile page. 
+EMAIL VERIFICATION: 
+If the user creates the account with the email and password he can verify it with the email. 
+The account is created, then the email is sent to the user for the verification. If the verification is completed good. If after an amount of time it still isnt verified the account is deleted and the user is sent to re registration page. If the user closes the app while verifing the account, the account remains created but the next time the user opens the app, the account will be deleted and the user will need to create a new one. 
+Everytime the app is opened it checks is the account of the user is verified, if it is not it deletes the account. 
 
 
 
