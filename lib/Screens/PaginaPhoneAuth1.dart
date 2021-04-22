@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:log/Services/Auth.dart';
 
@@ -9,6 +10,10 @@ import 'PaginaPhoneAuth2.dart';
 //SCHEMA: Inserisco numero di telefono
 
 class PaginaPhoneAuth1 extends StatefulWidget {
+  PaginaPhoneAuth1({this.email, this.password});
+  final String email;
+  final String password;
+
   static final String id = "PaginaPhoneAuth1";
   final String title = "Verifica Numero Telefono";
   @override
@@ -20,21 +25,23 @@ class _PaginaPhoneAuth1State extends State<PaginaPhoneAuth1> {
   TextEditingController numeroController;
   //Stringa per indicare errori da mostrare all'utente
   String messaggio;
-  List _datiUtente;
+  String _userEmail;
 
   @override
   void initState() {
     super.initState();
     numeroController = TextEditingController();
     messaggio = "";
-    _datiUtente = [];
+    //Controllo se conosco già l'email dell'utente. Se sta verificando un account social allora la devo ancora scoprire
+    if (widget.email == null) {
+      _userEmail = FirebaseAuth.instance.currentUser.email;
+    } else {
+      _userEmail = widget.email;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    //Se arrivo da creazione account con email e password, prendo ricevo questi argomenti, altrimenti non ricevo nulla
-    if (ModalRoute.of(context).settings.arguments != null)
-      _datiUtente = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -60,15 +67,28 @@ class _PaginaPhoneAuth1State extends State<PaginaPhoneAuth1> {
               ),
             ),
             ElevatedButton(
-              //TODO: Devo decidere cosa mostrare mentre attendo, dato che non so cosa riceverò.
               onPressed: () {
-                //Aggiungo ai parametri da passare alla prossima pagina il numero di telefono
-                _datiUtente.add(numeroController.text);
+                //Controllo validità del numero di telefono
+                if (numeroController.text.trim().length != 10)
+                  setState(() {
+                    messaggio = "Numero di telefono invalido";
+                  });
+
                 //Passo alla pagina successiva di verifica passando gli argomenti
-                Navigator.pushNamed(context, PaginaPhoneAuth2.id,
-                    arguments: _datiUtente);
+                //Se ho ancora la password passo anche quella perchè sto verificando un account creato con pass e email
+                //Se invece ho solo l'email allora significa che sto verificanfo un account social
+                Builder(
+                  builder: (context) => widget.password == null
+                      ? PaginaPhoneAuth2(
+                          email: _userEmail,
+                          numeroTel: numeroController.text.trim())
+                      : PaginaPhoneAuth2(
+                          email: _userEmail,
+                          password: widget.password,
+                          numeroTel: numeroController.text.trim()),
+                );
               },
-              child: Text("Invia"),
+              child: const Text("Invia"),
             ),
             //Mostro un messaggio di errore in caso ce ne sia uno
             Text(messaggio),

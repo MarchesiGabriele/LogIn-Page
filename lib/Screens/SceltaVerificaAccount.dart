@@ -35,9 +35,16 @@ class SceltaVerificaAccount extends StatelessWidget {
                 ),
                 //VERIFICA CON NUMERO DI TELEFONO
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, PaginaVerificaTelefono.id,
-                        arguments: _datiUtente);
+                  onPressed: () async {
+                    //Creo account con email e password.
+                    UserCredential p = await registrazioneEmail(
+                      _datiUtente.elementAt(0),
+                      _datiUtente.elementAt(1),
+                    );
+
+                    print("CREATO ACCOUNT: " +
+                        p.user.email +
+                        " ORA PROCEDO ALLA VERIFICA CON SMS");
                   },
                   child: const Text("Verifica con numero di Telefono"),
                 ),

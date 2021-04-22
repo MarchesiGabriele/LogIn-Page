@@ -1,11 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:log/Screens/PaginaPhoneAuth1.dart';
 import 'package:log/Services/Auth.dart';
 import 'package:log/Services/PhoneAuth.dart';
 
-//IN QUESTA PAGINA L'UTENTE INSERISCE IL CODICE DI CONFERMA RICEVUTO
+import 'Home.dart';
+
+//VERIFICO ACCOUNT CON NUMERO DI TELEFONO. L'ACCOUNT ARRIVATO A QUESTO PUNTO E' GIA' CREATO, SE LA VERIFICA AVVIENE ALLORA 
+//PROCEDO E VADO ALLA HOME, ALTRIMENTI SE VERIFICA NON VIENE COMPLETATA O NON E' CORRETTO IL CODICE ELIMINO ACCOUNT E MANDO UTENTE
+//ALLA REGISTRATION PAGE.
 
 class PaginaPhoneAuth2 extends StatefulWidget {
+  PaginaPhoneAuth2({this.email, this.password, @required this.numeroTel});
+  final String email;
+  final String password;
+  final String numeroTel;
+
   static final String id = "PaginaPhoneAuth2";
   final String title = "Verifica Numero Telefono";
   @override
@@ -16,35 +26,31 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
   //Controllore per campo di testo
   TextEditingController numeroController;
   //Stringa per indicare errori da mostrare all'utente
-  String messaggio;
-  List _datiUtente;
+  String messaggio;  
   @override
   void initState() {
     super.initState();
     numeroController = TextEditingController();
-    messaggio = "";
-    _datiUtente = [];
+    messaggio = "";    
   }
 
   @override
-  Widget build(BuildContext context) {
-    //Ricevo argomenti con (0) Email (Opzionale), (1) Password (Opzionale), (2) Numero Telefono (Obbligatorio)
-    _datiUtente = ModalRoute.of(context).settings.arguments;
+  Widget build(BuildContext context) {    
     return SafeArea(
       child: FutureBuilder(
         //Controllo se ho anche password ed email o solo numero telefono, in base a quello mando solamente i dati che possiedo
-        future: _datiUtente.length == 1
-            ? verifyPhone(numeroTelefono: _datiUtente.elementAt(0))
+        future: widget.password == null
+            ? verifyPhone(numeroTelefono: widget.numeroTel, email: widget.email)
             : verifyPhone(
-                email: _datiUtente.elementAt(0),
-                password: _datiUtente.elementAt(1),
-                numeroTelefono: _datiUtente.elementAt(2)),
+                email: widget.email,
+                password: widget.password,
+                numeroTelefono: widget.numeroTel),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           //Aspetto che la pagina carichi
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Un secondo..."),
+                title: const Text("Un secondo..."),
               ),
             );
           }
@@ -53,7 +59,7 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
             return SafeArea(
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text("Verifica Telefono 2"),
+                  title: const Text("Verifica Telefono 2"),
                 ),
                 body: Column(
                   children: <Widget>[
@@ -61,7 +67,7 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
                       height: 30,
                     ),
                     Text(
-                        "Abbiamo inviato un messaggio a 6 cifre a ${_datiUtente.length == 1 ? _datiUtente.elementAt(0) : _datiUtente.elementAt(2)} inseriscilo per confermare il tuo account"),
+                        "Abbiamo inviato un messaggio a 6 cifre a ${widget.email} inseriscilo per confermare il tuo account"),
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(),
@@ -108,56 +114,25 @@ class _PaginaPhoneAuth2State extends State<PaginaPhoneAuth2> {
     );
   }
 
-  Future<void> verifyPhone({String email, String password, @required String numeroTelefono}) async{
+  //Se utente viene verificato automaticamente lo mando alla home e gli aggiorno il profilo con "emailVerified" = true
+  void verificationCompletedAction(PhoneAuthCredential credentials){
+    print("VERIFICA SMS AUTOMATICA EFFETTUTA!");
+    Navigator.pushNamed(context, Home.id);    
+  }
 
-      
+  //Se verifica fallisce mando utente a inserire nuovamente il numero di telefono
+  void verificationFailedAction(){    
+    print("VERIFICA SMS FALLITA!");
+    Builder(builder: (context) => PaginaPhoneAuth1(email: widget.email, password: widget.password,),);
+  }
 
-
-    await FirebaseAuth.instance.verifyPhoneNumber(phoneNumber: phoneNumber,
-      verificationCompleted: verificationCompleted,
-      verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
+  Future<void> verifyPhone({@required String email, String password, @required String numeroTelefono}) async{
+      await FirebaseAuth.instance.verifyPhoneNumber(phoneNumber: widget.numeroTel,
+      verificationCompleted: verificationCompletedAction,
+      verificationFailed: null,
+      codeSent: null,
+      codeAutoRetrievalTimeout: null);
 
   }
 }
 
-/* SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-                "Inserisci il numero di telefono: \nTi Invieremo un codice via sms"),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ),
-              padding: EdgeInsets.only(left: 10),
-              margin: EdgeInsets.only(top: 30, left: 20),
-              height: 50,
-              width: 350,
-              child: TextField(
-                controller: numeroController,
-              ),
-            ),
-            ElevatedButton(
-              //TODO: Devo decidere cosa mostrare mentre attendo, dato che non so cosa riceverò.
-              onPressed: () {
-                //Aggiungo ai parametri da passare alla prossima pagina il numero di telefono
-                _datiUtente.add(numeroController.text);
-                Navigator.pushNamed(context, PaginaPhoneAuth2.id,
-                    arguments: _datiUtente);
-              },
-              child: Text("Invia"),
-            ),
-            Text(messaggio),
-          ],
-        ),
-      ),
-    ); */
