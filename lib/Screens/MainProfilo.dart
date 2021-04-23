@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:log/Screens/RegistrationPage.dart';
 import 'package:log/Services/Auth.dart';
-
-import 'Home.dart';
+import 'package:log/Services/FacebookAuth1.dart';
+import 'package:log/Services/GoogleAuth.dart';
 
 class MainProfilo extends StatefulWidget {
+  final String _title = "Sezione Profilo";
   @override
   _MainProfiloState createState() => _MainProfiloState();
 }
@@ -19,12 +18,12 @@ class _MainProfiloState extends State<MainProfilo> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Sezione Profilo"),
+          title: Text(widget._title),
           leading: Container(),
         ),
         body: Column(
           children: <Widget>[
-            //CANCELLO ACCOUNT DA FIREBASE
+            //CANCELLO ACCOUNT
             ElevatedButton(
               onPressed: () async {
                 await Auth().deleteUser();
@@ -32,30 +31,34 @@ class _MainProfiloState extends State<MainProfilo> {
               },
               child: Text("cancella Account"),
             ),
-            //PULSANTE LOGOUT
+            //ESEGUO SIGN_OUT
             Center(
-                child: ElevatedButton(
-              onPressed: () async {
-                //utente loggato con google
-                if (await GoogleSignIn().isSignedIn()) {
-                  Auth().googleSignOut();
-                }
-                //utente loggato con facebook
-                else if (FirebaseAuth.instance.currentUser != null &&
-                    FirebaseAuth
-                            .instance.currentUser.providerData[0].providerId ==
-                        "facebook.com") {
-                  await Auth().facebookSignOut();
-                }
-                //utente loggato con email e password
-                else {
-                  await Auth().logOut();
-                }
+              child: ElevatedButton(
+                onPressed: () async {
+                  String _provider = "";
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    _provider = FirebaseAuth
+                        .instance.currentUser.providerData[0].providerId;
+                  }
 
-                Navigator.pushNamed(context, RegistrationPage.id);
-              },
-              child: Text("Log off"),
-            ))
+                  //utente loggato con google
+                  if (_provider == "google.com") {
+                    await GoogleAuth().signOutGoogle();
+                  }
+                  //utente loggato con facebook
+                  else if (_provider == "facebook.com") {
+                    await FacebookAuth1().facebookSignOut();
+                  }
+                  //utente loggato con email e password
+                  else {
+                    await Auth().logOut();
+                  }
+
+                  Navigator.pushNamed(context, RegistrationPage.id);
+                },
+                child: Text("Log off"),
+              ),
+            ),
           ],
         ),
       ),

@@ -24,10 +24,6 @@ class _PaginaVerificaTelefonoState extends State<PaginaVerificaTelefono> {
     messaggio = "";
   }
 
-  void paginaSuccessiva() {
-    Navigator.pushNamed(context, PaginaVerificaTelefono2.id);
-  }
-
   @override
   Widget build(BuildContext context) {
     List _datiUtente = ModalRoute.of(context).settings.arguments;
@@ -58,7 +54,10 @@ class _PaginaVerificaTelefonoState extends State<PaginaVerificaTelefono> {
             ElevatedButton(
               //TODO: Devo decidere cosa mostrare mentre attendo, dato che non so cosa riceverò.
               onPressed: () {
-                _datiUtente.add(numeroController.text);
+                if (_datiUtente != null)
+                  _datiUtente.add(numeroController.text);
+                else
+                  List _datiUtente = [numeroController.text];
                 Navigator.pushNamed(context, PaginaVerificaTelefono2.id,
                     arguments: _datiUtente);
               },

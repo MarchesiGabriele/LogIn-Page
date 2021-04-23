@@ -17,6 +17,7 @@ class SceltaVerificaAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Argomenti: (0) Email, (1) Password
     List _datiUtente = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
@@ -34,9 +35,16 @@ class SceltaVerificaAccount extends StatelessWidget {
                 ),
                 //VERIFICA CON NUMERO DI TELEFONO
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, PaginaVerificaTelefono.id,
-                        arguments: _datiUtente);
+                  onPressed: () async {
+                    //Creo account con email e password.
+                    UserCredential p = await registrazioneEmail(
+                      _datiUtente.elementAt(0),
+                      _datiUtente.elementAt(1),
+                    );
+
+                    print("CREATO ACCOUNT: " +
+                        p.user.email +
+                        " ORA PROCEDO ALLA VERIFICA CON SMS");
                   },
                   child: const Text("Verifica con numero di Telefono"),
                 ),
@@ -46,13 +54,17 @@ class SceltaVerificaAccount extends StatelessWidget {
                 //VERIFICA CON EMAIL
                 ElevatedButton(
                     onPressed: () async {
-                      UserCredential p = await Auth().registrazioneEmail(
+                      //Creo account con email e password.
+                      UserCredential p = await registrazioneEmail(
                         _datiUtente.elementAt(0),
                         _datiUtente.elementAt(1),
                       );
-                      print(p.user.email);
-                      //invio email conferma
-                      await Auth().emailVerification();
+                      print("CREATO ACCOUNT: " +
+                          p.user.email +
+                          " ORA PROCEDO ALL'INVIO EMAIL DI CONFERMA");
+
+                      //Invio email conferma
+                      await emailVerification();
                       Navigator.pushNamed(
                         context,
                         PaginaVerificaEmail.id,
@@ -63,5 +75,38 @@ class SceltaVerificaAccount extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  //CREAZIONE ACCOUNT CON EMAIL
+  Future<UserCredential> registrazioneEmail(
+      String email, String password) async {
+    //Creo account con email e password
+    try {
+      print("CREAZIONE ACCOUNT: " + email + " PASS: " + password);
+      UserCredential usercredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return usercredential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+        return null;
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+        return null;
+      } else {
+        print("Eccezione sconosciuta SceltaVerificaAccount");
+        return null;
+      }
+    } catch (e) {
+      print("Errore Sconosciuto SceltaVerificaAccount");
+      return null;
+    }
+  }
+
+  //INVIO EMAIL DI VERIFICA
+  Future<void> emailVerification() async {
+    User user = FirebaseAuth.instance.currentUser;
+    await user.sendEmailVerification();
+    print("EMAIL DI CONFERMA INVIATA");
   }
 }

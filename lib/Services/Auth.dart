@@ -6,6 +6,8 @@ import 'package:log/Screens/PaginaVerificaTelefono2.dart';
 
 //NB!! USARE METODO DI USER "REAUTHENTICATE" PER QUANDO SI VUOLE EFFETTUARE UNA VERIFICA CHE L'UTENTE CHE VUOLE EFFETTUARE LA MODIFICA SIA I PROPRIETARIO DELL ACCOUNT
 
+//TODO: Rimuovere il captcha quando si esegue la verifica con numero di telefono
+
 //TODO: QUANDO UN UTENTE SI REGISTRA GLI MANDO UN'EMAIL E PER ENTRARE NELL APP DEVE FARE IL LOGIN. QUESTO LOGIN VIENE ACCETTATO
 //SOLO SE L'EMAIL E' STATA VERIFICATA, SE NON E' STATA VERIFICATA MANDO UN ERRORE E FACCIO APPARIRE PULSANTE CHE PERMETTE DI
 //INVIARE L'EMAIL DI VERIFICA NUOVAMENTE
@@ -37,94 +39,11 @@ class Auth {
     }
   }
 
-  //ACCEDO CON ACCOUNT FACEBOOK
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult result = await FacebookAuth.instance.login();
-
-    // Create a credential from the access token
-    final FacebookAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.accessToken.token);
-
-    // Once signed in, return the UserCredential
-    print("ACCESSO CON FACEBOOK EFFETTUATO");
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
-  }
-
-  //FACEBOOK SIGNOUT
-  Future<void> facebookSignOut() async {
-    try {
-      await FacebookAuth.instance.logOut();
-      print("FACEBOOK LOG OUT AVVENUTO CON SUCCESSO");
-    } catch (e) {
-      print("FACEBOOK LOG OUT ERROR");
-    }
-  }
-
-  //ACCEDO CON L'ACCOUNT GOOGLE
-  Future<UserCredential> signInGoogle() async {
-    GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-    GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    try {
-      print("AUTENTICAZIONE GOOGLE EFFETTUATA");
-
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        print("errore google 1");
-        return null;
-      } else if (e.code == 'invalid-credential') {
-        print("errore google 2");
-        return null;
-      }
-    } catch (e) {
-      print("errore google 3");
-      return null;
-    }
-  }
-
-  //GOOGLE SIGNOUT
-  Future<void> googleSignOut() async {
-    try {
-      await GoogleSignIn().signOut();
-      print("GOOGLE LOG OUT AVVENUTO CON SUCCESSO");
-    } catch (e) {
-      print("GOOGLE LOG OUT ERROR");
-    }
-  }
-
 //INVIO EMAIL DI VERIFICA
   Future<void> emailVerification() async {
     User user = FirebaseAuth.instance.currentUser;
     await user.sendEmailVerification();
   }
-
-//CONTROLLO SE EMAIL DI VERIFICA E' STATA CONFERMATA DALL'UTENTE O MENO
-  bool statoVerificaEmail(user) {
-    if (user.emailVerified) {
-      print("UTENTE HA VERIFICATO EMAIL");
-      return true;
-    } else {
-      print("UTENTE NON HA VERIFICATO EMAIL");
-      return false;
-    }
-  }
-  //SIGN IN ANONYMOUSLY
-  /* Future<void> signInAnonymous() async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInAnonymously();
-    } catch (e) {
-      print("Login anonimo failed");
-    }
-  } */
 
   //CONTROLLO STATO UTENTE QUANDO APRE L'APPLICAZIONE
   Future<bool> firsUserStatus() async {
@@ -148,10 +67,10 @@ class Auth {
     User primoEvento = await stream.first;
 
     if (primoEvento == null) {
-      print("utente non loggato/senza account");
+      print("UTENTE NON LOGGATO/SENZA ACCOUNT");
       return false;
     } else {
-      print("utente è loggato stream");
+      print("UTENTE LOGGATO");
       print(primoEvento);
       return true;
     }
@@ -175,9 +94,9 @@ class Auth {
     try {
       FirebaseAuth user = FirebaseAuth.instance;
       await user.signOut();
-      print("user è stato sloggato");
+      print("UTENTE HA ESEGUITO SIGNOUT TRADIZIONALE");
     } catch (e) {
-      print("errore logout");
+      print("ERRORE SIGN OUT TRADIZIONALE");
     }
   }
 
